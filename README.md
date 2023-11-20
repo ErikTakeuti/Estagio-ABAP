@@ -289,3 +289,221 @@ CREATE OBJECT co_produto.
 END-OF-SELECTION.
 ```
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+### TESTE DA CLASSE DE ESTOQUE
+
+```abap
+REPORT ZCLASS_ESTOQUE_02.
+
+TABLES: zestoque_02.
+
+DATA: ls_est TYPE zestoque_e_02,
+      lt_est TYPE TABLE OF zestoque_e_02.
+
+SELECTION-SCREEN BEGIN OF BLOCK a1 WITH FRAME TITLE TEXT-001.
+
+PARAMETERS: p_prod TYPE zestoque_02-produto,
+            p_uni  TYPE zestoque_02-unidade,
+            p_quan TYPE zestoque_02-quantidade.
+
+SELECTION-SCREEN END OF BLOCK a1.
+
+SELECTION-SCREEN BEGIN OF BLOCK a2 WITH FRAME TITLE TEXT-002.
+PARAMETERS: in      RADIOBUTTON GROUP rb DEFAULT 'X',
+            alt     RADIOBUTTON GROUP rb,
+            del     RADIOBUTTON GROUP rb,
+            sel     RADIOBUTTON GROUP rb,
+            sel_all RADIOBUTTON GROUP rb.
+SELECTION-SCREEN END OF BLOCK a2.
+
+CASE 'X'.
+
+  WHEN in.
+    DATA: cn_est TYPE REF TO zcl_estoque_02.
+    CREATE OBJECT cn_est.
+    cn_est->set_insert_estoque(
+    EXPORTING
+      prod = p_prod
+      uni = p_uni
+      quan = p_quan
+    ).
+
+    WHEN alt.
+    DATA: cs_est TYPE REF TO zcl_estoque_02.
+    CREATE OBJECT cs_est.
+    cs_est->set_altera_estoque(
+    EXPORTING
+      prod = p_prod
+      uni = p_uni
+      quan = p_quan
+    ).
+
+    WHEN del.
+    DATA: co_est TYPE REF TO zcl_estoque_02.
+    CREATE OBJECT co_est.
+    co_est->set_exclui_estoque(
+    EXPORTING
+      prod = p_prod
+      uni = p_uni
+      quan = p_quan
+    ).
+
+    WHEN sel.
+    DATA: ci_est TYPE REF TO zcl_estoque_02.
+    CREATE OBJECT ci_est.
+    ci_est->set_select_estoque(
+    EXPORTING
+      prod = p_prod
+    ).
+
+    WHEN sel_all.
+    DATA: ck_est TYPE REF TO zcl_estoque_02.
+    CREATE OBJECT ck_est.
+    ck_est->set_select_all_estoque(
+     EXPORTING
+      prod = p_prod
+      uni = p_uni
+      quan = p_quan
+    ).
+
+ENDCASE.
+```
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+### TESTE DA CLASSE DE PRODUTO
+
+```abap
+REPORT zclass_produto_02.
+
+TABLES: zprodutos_02.
+
+DATA: ls_produto TYPE zprodutos_e_02,
+      lt_prod    TYPE TABLE OF zprodutos_e_02.
+
+SELECTION-SCREEN BEGIN OF BLOCK a1 WITH FRAME TITLE TEXT-001.
+
+PARAMETERS: p_prod  TYPE zprodutos_02-produto,
+            p_desc  TYPE zprodutos_02-desc_produto,
+            p_preco TYPE zprodutos_02-preco.
+
+SELECTION-SCREEN END OF BLOCK a1.
+
+SELECTION-SCREEN BEGIN OF BLOCK a2 WITH FRAME TITLE TEXT-002.
+PARAMETERS: in      RADIOBUTTON GROUP rb DEFAULT 'X',
+            alt     RADIOBUTTON GROUP rb,
+            del     RADIOBUTTON GROUP rb,
+            sel     RADIOBUTTON GROUP rb,
+            sel_all RADIOBUTTON GROUP rb.
+SELECTION-SCREEN END OF BLOCK a2.
+
+CASE 'X'.
+
+  WHEN in.
+    DATA: cn_prod TYPE REF TO zcl_produto_02.
+    CREATE OBJECT cn_prod.
+    cn_prod->set_insert_produto(
+    EXPORTING
+      prod = p_prod
+      desc_prod = p_desc
+      price = p_preco
+    ).
+
+  WHEN alt.
+    DATA: cm_prod TYPE REF TO zcl_produto_02.
+    CREATE OBJECT cm_prod.
+    cm_prod->set_altera_produto(
+    EXPORTING
+      prod = p_prod
+      desc_prod = p_desc
+      price = p_preco
+    ).
+
+
+  WHEN del.
+    DATA: co_prod TYPE REF TO zcl_produto_02.
+    CREATE OBJECT co_prod.
+    co_prod->set_exclui_produto(
+    EXPORTING
+      prod = p_prod
+      desc_prod = p_desc
+      price = p_preco
+    ).
+
+
+  WHEN sel.
+    DATA: cs_prod TYPE REF TO zcl_produto_02.
+    CREATE OBJECT cs_prod.
+    cs_prod->set_select_produto(
+    EXPORTING
+      prod = p_prod
+    ).
+
+  WHEN sel_all.
+
+    DATA: cl_prod TYPE REF TO zcl_produto_02.
+    CREATE OBJECT cl_prod.
+    cl_prod->set_select_all_produto(
+    EXPORTING
+      prod = p_prod
+      desc_prod = p_desc
+      price = p_preco
+    ).
+
+ENDCASE.
+```
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+### TESTE DA CLASSE DE VENDA
+
+```abap
+REPORT zclass_venda_02.
+
+TABLES: zvendas_02.
+
+DATA: ls_ven TYPE zvendas_e_02,
+      lt_ven TYPE TABLE OF zvendas_e_02.
+
+SELECTION-SCREEN BEGIN OF BLOCK a1 WITH FRAME TITLE TEXT-001.
+
+PARAMETERS: p_ven  TYPE zvendas_02-venda,
+            p_item TYPE zvendas_02-item,
+            p_prod TYPE zvendas_02-produto,
+            p_quan TYPE zvendas_02-quantidade,
+            p_pre  TYPE zvendas_02-preco,
+            p_uni  TYPE zvendas_02-unidade,
+            p_moe  TYPE zvendas_02-moeda DEFAULT 'BRL',
+            p_data TYPE zvendas_02-data DEFAULT sy-datum,
+            p_hora TYPE zvendas_02-hora DEFAULT sy-uzeit.
+
+SELECTION-SCREEN END OF BLOCK a1.
+
+SELECTION-SCREEN BEGIN OF BLOCK a2 WITH FRAME TITLE TEXT-002.
+
+PARAMETERS: in      RADIOBUTTON GROUP rb DEFAULT 'X',
+            alt     RADIOBUTTON GROUP rb,
+            del     RADIOBUTTON GROUP rb,
+            sel     RADIOBUTTON GROUP rb,
+            sel_all RADIOBUTTON GROUP rb.
+
+SELECTION-SCREEN END OF BLOCK a2.
+
+CASE 'X'.
+
+  WHEN in.
+
+    DATA: ca_venda TYPE REF TO zcl_venda_02.
+    CREATE OBJECT ca_venda.
+    ca_venda->set_insert_venda(
+    EXPORTING
+    ven = p_ven
+    itm = p_item
+    prod = p_prod
+    quan = p_quan
+    price = p_pre
+    uni = p_uni
+    coin = p_moe
+    date = p_data
+    time = p_hora
+    ).
+
+ENDCASE.
+```
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
